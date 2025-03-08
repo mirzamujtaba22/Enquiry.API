@@ -43,19 +43,47 @@ namespace Enquiry.API.Controllers
             return model;
 
         }
-
+        [HttpPut("UpdateEnquiry")]
         public EnquiryModel Update(EnquiryModel model)
         {
 
             {
-                var record = _appContext.EntityModels.SingleOrDefault(m =>m.enquiryId == model.enquiryId);
-                _appContext.EntityModels.Add(model);
-                _appContext.SaveChanges();
+                var record = _appContext.EntityModels.SingleOrDefault(m => m.enquiryId == model.enquiryId);
+                if (record != null)
+                {
+                    record.resolution = model.resolution;
+                    record.enquiryStatusId = model.enquiryStatusId;
+                    _appContext.SaveChanges();
+                }
+
                 return model;
 
+
             }
+        }
+
+        [HttpPut("DeleteEnquirybyId")]
+        public bool DeleteEnquirybyId(int id)
+        {
+
+            {
+                var record = _appContext.EntityModels.SingleOrDefault(m => m.enquiryId == id);
+                if (record != null)
+
+                {
+                    _appContext.EntityModels.Remove(record);
+                    _appContext.SaveChanges();
+                    return true;
+                }
+
+                else
+                {
+                    return false;
+                }
 
 
+
+            }
         }
     }
 }
